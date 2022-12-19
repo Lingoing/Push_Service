@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest #指定运行环境为最新的Ubuntu版本
     strategy:
       matrix:
-        node-version: [12.22.9] #指定node版本
+        node-version: [15.9.0] #指定node版本
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }} #使用action安装node环境
@@ -19,5 +19,4 @@ jobs:
     - run: npm install express
     - run: npm install fs
     - run: npm install body-parser
-    - run: npm install #安装项目依赖
     - run: nodejs app.js 
