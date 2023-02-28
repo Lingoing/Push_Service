@@ -19,4 +19,4 @@ jobs:
         pip install flask
     - name: run main    
       run: |
-        python main.py
+        python ./main.py
