@@ -7,9 +7,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest #指定运行环境为最新的Ubuntu版本
-    strategy:
-      matrix:
-        node-version: [15.9.0] #指定node版本
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
@@ -20,9 +17,4 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install flask
-    - name: Build and publish
-      env:
-        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-      run: |
         python main.py
