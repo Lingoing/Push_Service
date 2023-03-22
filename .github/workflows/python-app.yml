@@ -5,7 +5,7 @@ name: Python application
 
 on:
  schedule:
-    - cron: '20 */2 * * *'
+    - cron: '25 */2 * * *'
 
 permissions:
   contents: read
