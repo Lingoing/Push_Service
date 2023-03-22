@@ -147,8 +147,8 @@ def json_to_form(json_data):
     her_bark_url = 'https://api.day.app/waz65gi8Cz3aWuZqCSBLfG/'
     requests.get(
         f'{my_bark_url}{quote(title + sky_con + temperature_current + apparent_temperature + temperature + humidity + visibility + speed + aqi + ultraviolet + comfort + forecast_keypoint)}')
-    # requests.get(
-    #    f'{her_bark_url}{quote(title + sky_con + temperature_current + apparent_temperature + temperature + humidity + visibility + speed + aqi + ultraviolet + comfort + forecast_keypoint)}')
+    requests.get(
+        f'{her_bark_url}{quote(title + sky_con + temperature_current + apparent_temperature + temperature + humidity + visibility + speed + aqi + ultraviolet + comfort + forecast_keypoint)}')
 
 
 if __name__ == '__main__':
