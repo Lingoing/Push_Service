@@ -10,7 +10,7 @@ on:
     branches: [ "master" ]
   schedule:
     # 每两小时执行一次
-    - cron: "*/1 * * * * Asia/Shanghai"
+    - cron: '*/1 * * * *'
 
 jobs:
   build:
