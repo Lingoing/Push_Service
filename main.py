@@ -2,6 +2,7 @@ import json
 import time
 from binascii import hexlify
 from urllib.parse import quote
+
 import requests
 from Cryptodome.Hash import SHA1
 
@@ -122,33 +123,66 @@ def get_wind_scale(wind_speed):
         return "躺平吧，没救了！"
 
 
+
+def get_text_api():
+    headers = {
+    "accept": "application/json, text/plain, */*",
+    "accept-encoding": "gzip, deflate, br",
+    "accept-language": "zh-CN,zh;q=0.9",
+    "dnt": "1",
+    "origin": "https://chp.shadiao.pro",
+    "referer": "https://chp.shadiao.pro/",
+    "sec-ch-ua": "\"Chromium\";v=\"21\", \" Not;A Brand\";v=\"99\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-site",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36"
+}
+    response = requests.get('https://api.shadiao.pro/chp',headers=headers)
+    chp = json.loads(response.text)
+    return chp['data']['text']
+
+
 def json_to_form(json_data):
     if not json_data:
         return None
-    if json_data['result']['alert']['content']:
-        alert = json_data['result']['alert']['content'][0]['description'] + '\n'
-        print(alert)
-    sky_con = f'''天气类型:{get_weather_type(str(json_data['result']['realtime']['skycon']))}''' + '\n'
-    temperature_current = f'''当前温度:{str(round(json_data['result']['realtime']['temperature']))}℃''' + '\n'
-    temperature = f'''温度:{str(round(json_data['result']['daily']['temperature'][1]['min']))}-{str(round(json_data['result']['daily']['temperature'][1]['max']))}℃''' + '\n'
-    apparent_temperature = f'''体感温度:{str(round(json_data['result']['realtime']['apparent_temperature']))}℃''' + '\n'
-    # cloudrate = f'''云量:{str((json_data['result']['realtime']['cloudrate']) * 100)}%''' + '\n'
-    humidity = f'''湿度:{str(round(json_data['result']['realtime']['humidity'] * 100))}%''' + '\n'
-    visibility = f'''能见度:{str(round(json_data['result']['realtime']['visibility']))}km''' + '\n'
+    sky_con = f'''天气类型：{get_weather_type(str(json_data['result']['realtime']['skycon']))}''' + '\n'
+    temperature_current = f'''当前温度：{str(round(json_data['result']['realtime']['temperature']))}℃''' + '\n'
+    temperature = f'''温度：{str(round(json_data['result']['daily']['temperature'][1]['min']))}-{str(round(json_data['result']['daily']['temperature'][1]['max']))}℃''' + '\n'
+    apparent_temperature = f'''体感温度：{str(round(json_data['result']['realtime']['apparent_temperature']))}℃''' + '\n'
+    # cloudrate = f'''云量：{str((json_data['result']['realtime']['cloudrate']) * 100)}%''' + '\n'
+    humidity = f'''湿度：{str(round(json_data['result']['realtime']['humidity'] * 100))}%''' + '\n'
+    visibility = f'''能见度：{str(round(json_data['result']['realtime']['visibility']))}km''' + '\n'
     direction = f'''{get_wind_direction(json_data['result']['realtime']['wind']['direction'])}'''
-    speed = f'''{direction}:{get_wind_scale(json_data['result']['realtime']['wind']['speed'])}''' + '\n'
-    aqi = f'''AQI:{get_aqi(json_data['result']['realtime']['air_quality']['aqi']['chn'])}''' + '\n'
-    ultraviolet = f'''紫外线强度:{json_data["result"]["realtime"]["life_index"]["ultraviolet"]["desc"]}''' + '\n'
-    comfort = f'''舒适度:{json_data["result"]["realtime"]["life_index"]["comfort"]["desc"]}''' + '\n'
-    forecast_keypoint = f'''预测:{json_data["result"]["forecast_keypoint"]}''' + '\n'
- 
+    speed = f'''{direction}：{get_wind_scale(json_data['result']['realtime']['wind']['speed'])}''' + '\n'
+    aqi = f'''AQI：{get_aqi(json_data['result']['realtime']['air_quality']['aqi']['chn'])}''' + '\n'
+    ultraviolet = f'''紫外线强度：{json_data["result"]["realtime"]["life_index"]["ultraviolet"]["desc"]}''' + '\n'
+    comfort = f'''舒适度：{json_data["result"]["realtime"]["life_index"]["comfort"]["desc"]}''' + '\n'
+    forecast_keypoint = f'''预测：{json_data["result"]["forecast_keypoint"]}''' + '\n'
+
     title = '泰山天气实时播报' + '\n\n'
     my_bark_url = 'https://api.day.app/TbsfqDZZoJXnaP46cttdsN/'
     her_bark_url = 'https://api.day.app/waz65gi8Cz3aWuZqCSBLfG/'
-    requests.get(
-        f'{my_bark_url}{quote(title + sky_con + temperature_current + apparent_temperature + temperature + humidity + visibility + speed + aqi + ultraviolet + comfort + forecast_keypoint)}')
-    requests.get(
-        f'{her_bark_url}{quote(title + sky_con + temperature_current + apparent_temperature + temperature + humidity + visibility + speed + aqi + ultraviolet + comfort + forecast_keypoint)}')
+
+    if json_data['result']['alert']['content']:
+        alert = json_data['result']['alert']['content'][0]['description'] + '\n\n'
+        requests.get(
+            f'{my_bark_url}{quote(title + alert + sky_con + temperature_current + apparent_temperature + temperature + humidity + visibility + speed + aqi + ultraviolet + comfort + forecast_keypoint)}')
+        requests.get(
+            f'{her_bark_url}{quote(title + alert + sky_con + temperature_current + apparent_temperature + temperature + humidity + visibility + speed + aqi + ultraviolet + comfort + forecast_keypoint)}')
+        time.sleep(5)
+        requests.get(my_bark_url + get_text_api())
+        requests.get(her_bark_url + get_text_api())
+    else:
+        requests.get(
+            f'{my_bark_url}{quote(title + sky_con + temperature_current + apparent_temperature + temperature + humidity + visibility + speed + aqi + ultraviolet + comfort + forecast_keypoint)}')
+        requests.get(
+            f'{her_bark_url}{quote(title + sky_con + temperature_current + apparent_temperature + temperature + humidity + visibility + speed + aqi + ultraviolet + comfort + forecast_keypoint)}')
+        time.sleep(5)
+        requests.get(my_bark_url + get_text_api())
+        requests.get(her_bark_url + get_text_api())
 
 
 if __name__ == '__main__':
