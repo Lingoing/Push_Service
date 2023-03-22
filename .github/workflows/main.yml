@@ -7,9 +7,6 @@ on:
  schedule:
     - cron: '25 */2 * * *'
 
-permissions:
-  contents: read
-
 jobs:
   build:
 
