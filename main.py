@@ -162,26 +162,26 @@ def json_to_form(json_data):
     comfort = f'''舒适度：{json_data["result"]["realtime"]["life_index"]["comfort"]["desc"]}''' + '\n'
     forecast_keypoint = f'''预测：{json_data["result"]["forecast_keypoint"]}''' + '\n'
 
-    title = '泰山天气实时播报' + '\n\n'
+    title = '每日天气预报' + '\n\n'
     my_bark_url = 'https://api.day.app/TbsfqDZZoJXnaP46cttdsN/'
     her_bark_url = 'https://api.day.app/waz65gi8Cz3aWuZqCSBLfG/'
 
     if json_data['result']['alert']['content']:
         alert = json_data['result']['alert']['content'][0]['description'] + '\n\n'
-        requests.get(
-            f'{my_bark_url}{quote(title + alert + sky_con + temperature_current + apparent_temperature + temperature + humidity + visibility + speed + aqi + ultraviolet + comfort + forecast_keypoint)}')
+        #requests.get(
+        #    f'{my_bark_url}{quote(title + alert + sky_con + temperature_current + apparent_temperature + temperature + humidity + visibility + speed + aqi + ultraviolet + comfort + forecast_keypoint)}')
         requests.get(
             f'{her_bark_url}{quote(title + alert + sky_con + temperature_current + apparent_temperature + temperature + humidity + visibility + speed + aqi + ultraviolet + comfort + forecast_keypoint)}')
         time.sleep(5)
-        requests.get(my_bark_url + get_text_api())
+        #requests.get(my_bark_url + get_text_api())
         requests.get(her_bark_url + get_text_api())
     else:
-        requests.get(
-            f'{my_bark_url}{quote(title + sky_con + temperature_current + apparent_temperature + temperature + humidity + visibility + speed + aqi + ultraviolet + comfort + forecast_keypoint)}')
+        #requests.get(
+        #    f'{my_bark_url}{quote(title + sky_con + temperature_current + apparent_temperature + temperature + humidity + visibility + speed + aqi + ultraviolet + comfort + forecast_keypoint)}')
         requests.get(
             f'{her_bark_url}{quote(title + sky_con + temperature_current + apparent_temperature + temperature + humidity + visibility + speed + aqi + ultraviolet + comfort + forecast_keypoint)}')
         time.sleep(5)
-        requests.get(my_bark_url + get_text_api())
+        #requests.get(my_bark_url + get_text_api())
         requests.get(her_bark_url + get_text_api())
 
 
@@ -189,4 +189,4 @@ if __name__ == '__main__':
     my_location = ''
     her_location = '119.1156110459953,36.74347502354077'
     tai_shan = '117.094738,36.269893'
-    json_to_form(json.loads(get_response(generate_device_id(), tai_shan)))
+    json_to_form(json.loads(get_response(generate_device_id(), her_location)))
