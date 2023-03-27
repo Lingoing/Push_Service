@@ -272,7 +272,6 @@ if __name__ == '__main__':
     else:
         balance = json_data['data'][0]['balance']
         if balance < 2000:
-            bark_url = 'https://api.day.app/TbsfqDZZoJXnaP46cttdsN/'
             requests.get(
                 f'{bark_url}水费余额不足，请及时充值！\n当前余额：{balance / 100}元')
         else:
