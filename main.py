@@ -5,6 +5,80 @@ from urllib.parse import quote
 
 import requests
 from Cryptodome.Hash import SHA1
+import json
+
+
+def get_session():
+    headers = {
+        "Host": "payapp.wechatpay.cn",
+        "Connection": "keep-alive",
+        "Content-Length": "773",
+        "Accept": "application/json, text/plain, */*",
+        "content-type": "application/xml",
+        "X-Requested-With": "XMLHttpRequest",
+        "Accept-Encoding": "gzip,compress,br,deflate",
+        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, "
+                      "like Gecko) Mobile/15E148 MicroMessenger/8.0.34(0x18002227) NetType/4G Language/zh_CN",
+        "Referer": "https://servicewechat.com/wxd2ade0f25a874ee2/342/page-frame.html"
+    }
+    cookies = {
+        "sid_cookie": "363199592078,82",
+        "livepayment_env": "wxapp",
+        "session_key": "A66CBDEDB6E716DD7595FE2B44E0F1BB",
+        "lfkey": "A66CBDEDB6E716DD7595FE2B44E0F1BB",
+        "lfopenid": "oxBHq0Dplq2hrIpsv25PvhCDyNdE",
+        "exportkey": "A66CBDEDB6E716DD7595FE2B44E0F1BB"
+    }
+    url = "https://payapp.wechatpay.cn/life/getbill"
+    params = {
+        "g_tk": "A66CBDEDB6E716DD7595FE2B44E0F1BB",
+        "open_id": "oxBHq0Dplq2hrIpsv25PvhCDyNdE",
+        "ver": "mp-1.109.1"
+    }
+    data = "<xml><bill_key>93230</bill_key><company_id>010026652</company_id><city_id>130400</city_id><business_type" \
+           ">1</business_type><channel>3</channel><begin_num>1</begin_num><query_num>1</query_num><usr_method>2" \
+           "</usr_method><random>751501T1679886886840</random><attach>eyJBZ2VuY3lOYW1lIjoi56OB5Y6/5oGS5rO95Z" \
+           "+O5biC5YR5bGV5pyJ6ZmQ5YWs5Y" \
+           "+4IiwiQWdlbmN5SWQiOiIwMTAwMjY2NTIiLCJ3eF9hZ2VuY3lfaWQiOiIxMzA0MDAwMDAxMTciLCJidXNpbmVzc190eXBlIjoxLCJjaXR5bmFtZSI6IumCr+mDuOW4giIsImNpdHlpZCI6IjEzMDQwMCIsImJpbGxfa2V5IjoiOTMyMzAiLCJuZWVkaW5wdXQiOjAsImlzYmFyY29kZSI6MCwiZmllbGQxIjoiIiwiZmllbGQyIjoiIiwiZmllbGQzIjoiIiwiZmllbGQ0IjoiIiwidXNyX21ldGhvZCI6IjIifQ==</attach><record_id>3826679379</record_id><source>MINI_APP</source><wx_agency_id>130400000117</wx_agency_id><is_sandbox>0</is_sandbox></xml>"
+    response = requests.post(url, headers=headers, cookies=cookies, params=params, data=data)
+
+    print(response.text)
+
+
+def get_balance():
+    headers = {
+        "Host": "payapp.wechatpay.cn",
+        "Connection": "keep-alive",
+        "Content-Length": "773",
+        "Accept": "application/json, text/plain, */*",
+        "content-type": "application/xml",
+        "X-Requested-With": "XMLHttpRequest",
+        "Accept-Encoding": "gzip,compress,br,deflate",
+        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, "
+                      "like Gecko) Mobile/15E148 MicroMessenger/8.0.34(0x18002227) NetType/4G Language/zh_CN",
+        "Referer": "https://servicewechat.com/wxd2ade0f25a874ee2/342/page-frame.html"
+    }
+    cookies = {
+        "sid_cookie": "363199592078,83",
+        "livepayment_env": "wxapp",
+        "session_key": "A66CBDEDB6E716DD7595FE2B44E0F1BB",
+        "lfkey": "A66CBDEDB6E716DD7595FE2B44E0F1BB",
+        "lfopenid": "oxBHq0Dplq2hrIpsv25PvhCDyNdE",
+        "exportkey": "A66CBDEDB6E716DD7595FE2B44E0F1BB"
+    }
+    url = "https://payapp.wechatpay.cn/life/checkqueryresponse"
+    params = {
+        "g_tk": "A66CBDEDB6E716DD7595FE2B44E0F1BB",
+        "open_id": "oxBHq0Dplq2hrIpsv25PvhCDyNdE",
+        "ver": "mp-1.109.1"
+    }
+    data = '<xml><bill_key>93230</bill_key><company_id>010026652</company_id><city_id>130400</city_id><business_type' \
+           '>1</business_type><channel>3</channel><out_trade_no>aORSLaHDh5Xg4133</out_trade_no><serial_no>53055099351' \
+           '</serial_no><is_last_check>0</is_last_check><attach>eyJBZ2VuY3lOYW1lIjoi56OB5Y6/5oGS5rO95Z+O5biC5Y' \
+           '+R5bGV5pyJ6ZmQ5YWs5Y' \
+           '+4IiwiQWdlbmN5SWQiOiIwMTAwMjY2NTIiLCJ3eF9hZ2VuY3lfaWQiOiIxMzA0MDAwMDAxMTciLCJidXNpbmVzc190eXBlIjoxLCJjaXR5bmFtZSI6IumCr+mDuOW4giIsImNpdHlpZCI6IjEzMDQwMCIsImJpbGxfa2V5IjoiOTMyMzAiLCJuZWVkaW5wdXQiOjAsImlzYmFyY29kZSI6MCwiZmllbGQxIjoiIiwiZmllbGQyIjoiIiwiZmllbGQzIjoiIiwiZmllbGQ0IjoiIiwidXNyX21ldGhvZCI6IjIifQ==</attach><wx_agency_id>130400000117</wx_agency_id><record_id>3826679379</record_id><source>MINI_APP</source><is_sandbox>0</is_sandbox></xml>'
+    response = requests.post(url, headers=headers, cookies=cookies, params=params, data=data)
+    return response.text
 
 
 def generate_device_id():
@@ -186,7 +260,14 @@ def json_to_form(json_data):
 
 
 if __name__ == '__main__':
-    my_location = ''
-    her_location = '119.1156110459953,36.74347502354077'
-    tai_shan = '117.094738,36.269893'
-    json_to_form(json.loads(get_response(generate_device_id(), her_location)))
+    # my_location = ''
+    # her_location = '119.1156110459953,36.74347502354077'
+    # tai_shan = '117.094738,36.269893'
+    # json_to_form(json.loads(get_response(generate_device_id(), her_location)))
+    balance = json.loads(get_balance())['data'][0]['balance']
+    if balance < 2000:
+        bark_url = 'https://api.day.app/TbsfqDZZoJXnaP46cttdsN/'
+        requests.get(
+            f'{bark_url}水费余额不足，请及时充值！\n当前余额：{balance / 100}元')
+    else:
+        print(f'当前余额：{balance / 100}元')
