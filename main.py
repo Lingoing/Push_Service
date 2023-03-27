@@ -5,80 +5,91 @@ from urllib.parse import quote
 
 import requests
 from Cryptodome.Hash import SHA1
-import json
 
 
 def get_session():
     headers = {
-        "Host": "payapp.wechatpay.cn",
-        "Connection": "keep-alive",
-        "Content-Length": "773",
-        "Accept": "application/json, text/plain, */*",
-        "content-type": "application/xml",
-        "X-Requested-With": "XMLHttpRequest",
-        "Accept-Encoding": "gzip,compress,br,deflate",
+        "Host": "bjcloudpayment.cebbank.com",
+        "Accept": "*/*",
+        "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9"
+                         ".eyJzdWIiOiI4YzA3OTNhOWZkM2M0YWI5OWU5OTI1YTM3OWE4NDljZiIsImlhdCI6MTY3OTkwMTUxNCwiZXhwIjoxNjc5OTA4NzE0fQ.BzoQ9t5MjkL-N28TbTm5sBylbEiN37IaKg_9QoZSSqGGetfjIVmebOTe7Axptsi6LqHA0ZFcZ0e8hWBZPDsOhg",
+        "Accept-Charset": "utf-8",
+        "Accept-Language": "zh-CN,en-US;q=0.8",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Content-Type": "application/json;charset=utf-8",
+        "Content-Length": "43",
         "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, "
-                      "like Gecko) Mobile/15E148 MicroMessenger/8.0.34(0x18002227) NetType/4G Language/zh_CN",
-        "Referer": "https://servicewechat.com/wxd2ade0f25a874ee2/342/page-frame.html"
+                      "like Gecko) Mobile/20D67 Ariver/1.1.0 AliApp(AP/10.3.66.6000) Nebula WK RVKType(0) "
+                      "AlipayDefined(nt:4G,ws:390|780|3.0,ac:T|ss) AlipayClient/10.3.66.6000 Language/zh-Hans "
+                      "Region/CN NebulaX/1.0.0 XRiver/10.2.58.1",
+        "Referer": "https://2021002147635087.hybrid.alipay-eco.com/2021002147635087/0.2.2303221653.12/index.html"
+                   "#pages/index/transferPage/index",
+        "alipayMiniMark": "JcFk83uVJ7R7/NA7x8FSozgPjUdjw+pid34Ge2ke89jDbKDkJeltt613caLWjtoPwz"
+                          "+v6lcKayIyCdBwTyddYlSMqF0jyL5P4J2+I8qThGs=",
+        "Connection": "keep-alive",
+        "x-ceb-cloudpayment-adcode": "370700"
     }
     cookies = {
-        "sid_cookie": "363199592078,82",
-        "livepayment_env": "wxapp",
-        "session_key": "A66CBDEDB6E716DD7595FE2B44E0F1BB",
-        "lfkey": "A66CBDEDB6E716DD7595FE2B44E0F1BB",
-        "lfopenid": "oxBHq0Dplq2hrIpsv25PvhCDyNdE",
-        "exportkey": "A66CBDEDB6E716DD7595FE2B44E0F1BB"
+        "JSESSIONID": "63C1FCC63197E37F3B60EE7EDF858161"
     }
-    url = "https://payapp.wechatpay.cn/life/getbill"
-    params = {
-        "g_tk": "A66CBDEDB6E716DD7595FE2B44E0F1BB",
-        "open_id": "oxBHq0Dplq2hrIpsv25PvhCDyNdE",
-        "ver": "mp-1.109.1"
+    url = "https://bjcloudpayment.cebbank.com/ceb-bf-cloud-payment/webapi/item/queryBillInformation"
+    data = {
+        "companyId": "010026653",
+        "billKey": "93230"
     }
-    data = "<xml><bill_key>93230</bill_key><company_id>010026652</company_id><city_id>130400</city_id><business_type" \
-           ">1</business_type><channel>3</channel><begin_num>1</begin_num><query_num>1</query_num><usr_method>2" \
-           "</usr_method><random>751501T1679886886840</random><attach>eyJBZ2VuY3lOYW1lIjoi56OB5Y6/5oGS5rO95Z" \
-           "+O5biC5YR5bGV5pyJ6ZmQ5YWs5Y" \
-           "+4IiwiQWdlbmN5SWQiOiIwMTAwMjY2NTIiLCJ3eF9hZ2VuY3lfaWQiOiIxMzA0MDAwMDAxMTciLCJidXNpbmVzc190eXBlIjoxLCJjaXR5bmFtZSI6IumCr+mDuOW4giIsImNpdHlpZCI6IjEzMDQwMCIsImJpbGxfa2V5IjoiOTMyMzAiLCJuZWVkaW5wdXQiOjAsImlzYmFyY29kZSI6MCwiZmllbGQxIjoiIiwiZmllbGQyIjoiIiwiZmllbGQzIjoiIiwiZmllbGQ0IjoiIiwidXNyX21ldGhvZCI6IjIifQ==</attach><record_id>3826679379</record_id><source>MINI_APP</source><wx_agency_id>130400000117</wx_agency_id><is_sandbox>0</is_sandbox></xml>"
-    response = requests.post(url, headers=headers, cookies=cookies, params=params, data=data)
-
-    print(response.text)
+    data = json.dumps(data, separators=(',', ':'))
+    response = requests.post(url, headers=headers, cookies=cookies, data=data)
+    return response.text
 
 
 def get_balance():
     headers = {
-        "Host": "payapp.wechatpay.cn",
-        "Connection": "keep-alive",
-        "Content-Length": "773",
-        "Accept": "application/json, text/plain, */*",
-        "content-type": "application/xml",
-        "X-Requested-With": "XMLHttpRequest",
-        "Accept-Encoding": "gzip,compress,br,deflate",
+        "Host": "bjcloudpayment.cebbank.com",
+        "Accept": "*/*",
+        "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9"
+                         ".eyJzdWIiOiI4YzA3OTNhOWZkM2M0YWI5OWU5OTI1YTM3OWE4NDljZiIsImlhdCI6MTY3OTkwMTUxNCwiZXhwIjoxNjc5OTA4NzE0fQ.BzoQ9t5MjkL-N28TbTm5sBylbEiN37IaKg_9QoZSSqGGetfjIVmebOTe7Axptsi6LqHA0ZFcZ0e8hWBZPDsOhg",
+        "Accept-Charset": "utf-8",
+        "Accept-Language": "zh-CN,en-US;q=0.8",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Content-Type": "application/json;charset=utf-8",
+        "Content-Length": "34",
         "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, "
-                      "like Gecko) Mobile/15E148 MicroMessenger/8.0.34(0x18002227) NetType/4G Language/zh_CN",
-        "Referer": "https://servicewechat.com/wxd2ade0f25a874ee2/342/page-frame.html"
+                      "like Gecko) Mobile/20D67 Ariver/1.1.0 AliApp(AP/10.3.66.6000) Nebula WK RVKType(0) "
+                      "AlipayDefined(nt:4G,ws:390|780|3.0,ac:T|ss) AlipayClient/10.3.66.6000 Language/zh-Hans "
+                      "Region/CN NebulaX/1.0.0 XRiver/10.2.58.1",
+        "Referer": "https://2021002147635087.hybrid.alipay-eco.com/2021002147635087/0.2.2303221653.12/index.html"
+                   "#pages/index/transferPage/index",
+        "alipayMiniMark": "JcFk83uVJ7R7/NA7x8FSo7LotPY0AqriTlWVxbCZPIWILg1OO9nB5G0DFf6jVuuDeG7M+VH8ktlLAm"
+                          "+S3NijNVGxbuWUlmhmFjri4ic+gik=",
+        "Connection": "keep-alive",
+        "x-ceb-cloudpayment-adcode": "370700"
     }
     cookies = {
-        "sid_cookie": "363199592078,83",
-        "livepayment_env": "wxapp",
-        "session_key": "A66CBDEDB6E716DD7595FE2B44E0F1BB",
-        "lfkey": "A66CBDEDB6E716DD7595FE2B44E0F1BB",
-        "lfopenid": "oxBHq0Dplq2hrIpsv25PvhCDyNdE",
-        "exportkey": "A66CBDEDB6E716DD7595FE2B44E0F1BB"
+        "JSESSIONID": "A78A28BAC4AA2F7AB0AD37A4BE8C4F6F"
     }
-    url = "https://payapp.wechatpay.cn/life/checkqueryresponse"
-    params = {
-        "g_tk": "A66CBDEDB6E716DD7595FE2B44E0F1BB",
-        "open_id": "oxBHq0Dplq2hrIpsv25PvhCDyNdE",
-        "ver": "mp-1.109.1"
+    url = "https://bjcloudpayment.cebbank.com/ceb-bf-cloud-payment/webapi/item/queryBillInformationDetail"
+    data = {
+        "trmSeqNum": str(json.loads(get_session())['data']['trmSeqNum'])
     }
-    data = '<xml><bill_key>93230</bill_key><company_id>010026652</company_id><city_id>130400</city_id><business_type' \
-           '>1</business_type><channel>3</channel><out_trade_no>aORSLaHDh5Xg4133</out_trade_no><serial_no>53055099351' \
-           '</serial_no><is_last_check>0</is_last_check><attach>eyJBZ2VuY3lOYW1lIjoi56OB5Y6/5oGS5rO95Z+O5biC5Y' \
-           '+R5bGV5pyJ6ZmQ5YWs5Y' \
-           '+4IiwiQWdlbmN5SWQiOiIwMTAwMjY2NTIiLCJ3eF9hZ2VuY3lfaWQiOiIxMzA0MDAwMDAxMTciLCJidXNpbmVzc190eXBlIjoxLCJjaXR5bmFtZSI6IumCr+mDuOW4giIsImNpdHlpZCI6IjEzMDQwMCIsImJpbGxfa2V5IjoiOTMyMzAiLCJuZWVkaW5wdXQiOjAsImlzYmFyY29kZSI6MCwiZmllbGQxIjoiIiwiZmllbGQyIjoiIiwiZmllbGQzIjoiIiwiZmllbGQ0IjoiIiwidXNyX21ldGhvZCI6IjIifQ==</attach><wx_agency_id>130400000117</wx_agency_id><record_id>3826679379</record_id><source>MINI_APP</source><is_sandbox>0</is_sandbox></xml>'
-    response = requests.post(url, headers=headers, cookies=cookies, params=params, data=data)
+    data = json.dumps(data, separators=(',', ':'))
+    response = requests.post(url, headers=headers, cookies=cookies, data=data)
     return response.text
+
+
+def temp_function():
+    bark_url = 'https://api.day.app/TbsfqDZZoJXnaP46cttdsN/'
+    json_data = json.loads(get_balance())
+    print(json_data)
+    if json_data['ret_code'] != 0:
+        requests.get(
+            f'{bark_url}数据获取失败！')
+    else:
+        balance = json_data['data'][0]['balance']
+        if balance < 2000:
+            requests.get(
+                f'{bark_url}水费余额不足，请及时充值！\n当前余额：{balance / 100}元')
+        else:
+            print(f'当前余额：{balance / 100}元')
 
 
 def generate_device_id():
@@ -266,13 +277,16 @@ if __name__ == '__main__':
     # json_to_form(json.loads(get_response(generate_device_id(), her_location)))
     bark_url = 'https://api.day.app/TbsfqDZZoJXnaP46cttdsN/'
     json_data = json.loads(get_balance())
-    if json_data['ret_code'] != 0:
-        requests.get(
-            f'{bark_url}数据获取失败！')
+    errorCode = json_data['errorCode']
+    if errorCode != 'AAAAAAA':
+        print("获取余额信息失败！")
     else:
-        balance = json_data['data'][0]['balance']
-        if balance < 2000:
+        balance = int(json_data['data']['billData'][0]['balance'])
+        if balance <= 2000:
             requests.get(
                 f'{bark_url}水费余额不足，请及时充值！\n当前余额：{balance / 100}元')
+            print(f'通知已发送，当前余额：{balance / 100}元')
         else:
+            requests.get(
+                f'{bark_url}当前余额：{balance / 100}元')
             print(f'当前余额：{balance / 100}元')
