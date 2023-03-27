@@ -264,10 +264,16 @@ if __name__ == '__main__':
     # her_location = '119.1156110459953,36.74347502354077'
     # tai_shan = '117.094738,36.269893'
     # json_to_form(json.loads(get_response(generate_device_id(), her_location)))
-    balance = json.loads(get_balance())['data'][0]['balance']
-    if balance < 2000:
-        bark_url = 'https://api.day.app/TbsfqDZZoJXnaP46cttdsN/'
+    bark_url = 'https://api.day.app/TbsfqDZZoJXnaP46cttdsN/'
+    json_data = json.loads(get_balance())
+    if json_data['ret_code'] != 0:
         requests.get(
-            f'{bark_url}水费余额不足，请及时充值！\n当前余额：{balance / 100}元')
+            f'{bark_url}数据获取失败！')
     else:
-        print(f'当前余额：{balance / 100}元')
+        balance = json_data['data'][0]['balance']
+        if balance < 2000:
+            bark_url = 'https://api.day.app/TbsfqDZZoJXnaP46cttdsN/'
+            requests.get(
+                f'{bark_url}水费余额不足，请及时充值！\n当前余额：{balance / 100}元')
+        else:
+            print(f'当前余额：{balance / 100}元')
